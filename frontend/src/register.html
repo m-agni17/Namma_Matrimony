@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namma Matrimony - Get Started</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <button id="backBtn" onclick="goBack()">Back</button>
+            <span class="site-name">Namma Matrimony</span>
+            <button id="profileBtn">☰</button>
+        </nav>
+    </header>
+    
+    <aside class="sidebar" id="sidebar">
+        <button class="closeBtn" id="closeBtn">×</button>
+        <ul>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Log Out</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <section class="get-started">
+            <form id="registrationForm">
+                <!-- Step 1 -->
+                <div class="form-step active">
+                    <h2>Sign in using Google</h2>
+                    <button id="googleSignInBtn">Sign in with Google</button>
+                </div>
+                <!-- Step 2 -->
+                <div class="form-step">
+                    <h2>This profile is for:</h2>
+                    <label>
+                        <input type="radio" name="profileFor" value="Friend" class="btn-radio"> <span>Friend</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="profileFor" value="Son" class="btn-radio"> <span>Son</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="profileFor" value="Brother" class="btn-radio"> <span>Brother</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="profileFor" value="Daughter" class="btn-radio"> <span>Daughter</span>
+                    </label>
+                    <h3>Gender:</h3>
+                    <label>
+                        <input type="radio" name="gender" value="Male" class="btn-radio"> <span>Male</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Female" class="btn-radio"> <span>Female</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Other" class="btn-radio"> <span>Other</span>
+                    </label>
+                </div>
+                <!-- Step 3 -->
+                <div class="form-step">
+                    <h2>Profile Details</h2>
+                    <label for="createProfile">Create Profile:</label>
+                    <input type="text" id="createProfile" name="createProfile" required>
+                    <label for="city">City Living:</label>
+                    <input type="text" id="city" name="city" required>
+                    <label for="withFamily">With Family?</label>
+                    <select id="withFamily" name="withFamily" required>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label for="diet">Diet:</label>
+                    <select id="diet" name="diet" required>
+                        <option value="veg">Vegetarian</option>
+                        <option value="non-veg">Non-Vegetarian</option>
+                        <option value="vegan">Vegan</option>
+                    </select>
+                    <label for="height">Height:</label>
+                    <input type="text" id="height" name="height" required>
+                    <label for="weight">Weight:</label>
+                    <input type="text" id="weight" name="weight" required>
+                    <label for="religion">Religion:</label>
+                    <input type="text" id="religion" name="religion" required>
+                </div>
+                <!-- Step 4 -->
+                <div class="form-step">
+                    <h2>Work Details</h2>
+                    <label for="role">Role:</label>
+                    <input type="text" id="role" name="role" required>
+                    <label for="workplace">Workplace:</label>
+                    <input type="text" id="workplace" name="workplace" required>
+                    <label for="salary">Salary:</label>
+                    <input type="text" id="salary" name="salary" required>
+                </div>
+                <!-- Step 5 -->
+                <div class="form-step">
+                    <h2>Sign in using Google</h2>
+                    <button id="googleSignInBtnStep6">Sign in with Google</button>
+                </div>
+                <!-- Recommendations Step -->
+                <div class="form-step">
+                    <h2>Recommendations</h2>
+                    <div id="recommendations">
+                        <!-- Recommendations will be dynamically loaded here -->
+                    </div>
+                </div>
+                <button type="button" id="nextStepBtn" onclick="nextStep()">Next</button>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Namma Matrimony. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        let currentStep = 0;
+        const steps = document.querySelectorAll(".form-step");
+        const nextStepBtn = document.getElementById("nextStepBtn");
+
+        function goBack() {
+            window.location.href = 'index.html'; // Replace 'index.html' with your actual home page URL
+        }
+
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+            // Handle the ID token (e.g., send it to your backend for verification)
+        }
+
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: 'YOUR_CLIENT_ID',  // Replace with your actual client ID
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInBtn"),
+                { theme: "outline", size: "large" }  // Customization attributes
+            );
+            google.accounts.id.prompt(); // Display the One Tap dialog
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                steps[currentStep].classList.remove("active");
+                currentStep++;
+                steps[currentStep].classList.add("active");
+                if (currentStep === steps.length - 1) {
+                    nextStepBtn.style.display = "none";
+                    window.location.href = 'recommendations.html'; // Redirect to recommendations.html
+                }
+            }
+        }
+
+        document.getElementById("profileBtn").addEventListener("click", function() {
+            document.getElementById("sidebar").style.left = "0";
+        });
+
+        document.getElementById("closeBtn").addEventListener("click", function() {
+            document.getElementById("sidebar").style.left = "-250px";
+        });
+    </script>
+</body>
+</html>

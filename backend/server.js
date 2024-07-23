@@ -1,29 +1,25 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-
-dotenv.config(); // Load environment variables
+require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-  });
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected...'))
+.catch(err => console.log(err));
 
-// Middleware
 app.use(express.json());
 
-// Define ToDo schema and model here (see Step 2)
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
-// Define CRUD routes here (see Step 3)
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
